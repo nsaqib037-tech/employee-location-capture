@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Location Capture</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button {
+      padding: 14px;
+      width: 100%;
+      background: #0078D4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>📍 Employee Location Capture</h2>
+<p>Click the button below and allow location access.</p>
+
+<button onclick="getLocation()">Get My Location</button>
+
+<div id="output"></div>
+
+<script>
+function getLocation() {
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported on this device.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, {
+        enableHighAccuracy: true,
+        timeout: 10000
+    });
+}
+
+function success(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const link = `https://www.google.com/maps?q=${lat},${lon}`;
+    
+    document.getElementById("output").innerHTML = `
+        <strong>Latitude:</strong> ${lat}<br>
+        <strong>Longitude:</strong> ${lon}<br><br>
+        <strong>Google Maps Link:</strong><br>
+        <a href="${link}" target="_blank">${link}</a><br><br>
+        <button onclick="copyText('${link}')">Copy Location</button>
+    `;
+}
+
+function error(err) {
+    alert("Unable to fetch location. Please allow location permissions.");
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Location copied! Please paste it into the MS Form.");
+    });
+}
+</script>
+
+</body>
+</html>
